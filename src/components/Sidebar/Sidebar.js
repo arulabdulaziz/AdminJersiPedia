@@ -64,7 +64,7 @@ function Sidebar(props) {
           href="https://www.creative-tim.com"
           className="simple-text logo-normal"
         >
-          Creative Tim
+          Admin Jersipedia
         </a>
       </div>
       <div className="sidebar-wrapper" ref={sidebar}>

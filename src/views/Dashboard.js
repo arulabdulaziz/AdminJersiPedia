@@ -35,7 +35,6 @@ import {
   dashboardEmailStatisticsChart,
   dashboardNASDAQChart,
 } from "variables/charts.js";
-
 function Dashboard() {
   return (
     <>

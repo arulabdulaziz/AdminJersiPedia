@@ -48,7 +48,7 @@ function Header(props) {
     if (isOpen) {
       setColor("transparent");
     } else {
-      setColor("dark");
+      setColor("white");
     }
     setIsOpen(!isOpen);
   };
@@ -69,10 +69,10 @@ function Header(props) {
     document.documentElement.classList.toggle("nav-open");
     sidebarToggle.current.classList.toggle("toggled");
   };
-  // function that adds color dark/transparent to the navbar on resize (this is for the collapse)
+  // function that adds color white/transparent to the navbar on resize (this is for the collapse)
   const updateColor = () => {
     if (window.innerWidth < 993 && isOpen) {
-      setColor("dark");
+      setColor("white");
     } else {
       setColor("transparent");
     }
@@ -94,7 +94,7 @@ function Header(props) {
     <Navbar
       color={
         props.location.pathname.indexOf("full-screen-maps") !== -1
-          ? "dark"
+          ? "white"
           : color
       }
       expand="lg"
@@ -154,13 +154,13 @@ function Header(props) {
               <DropdownToggle caret nav>
                 <i className="nc-icon nc-single-02" />
                 <p>
-                  <span className="d-lg-none d-md-block">Profile</span>
+                  <span className="d-lg-none d-md-block">Account</span>
                 </p>
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag="a">Action</DropdownItem>
-                <DropdownItem tag="a">Another Action</DropdownItem>
-                <DropdownItem tag="a">Something else here</DropdownItem>
+                <DropdownItem tag="a" className="cursor-pointer">Logout</DropdownItem>
+                {/* <DropdownItem tag="a" className="cursor-pointer">Another Action</DropdownItem>
+                <DropdownItem tag="a" className="cursor-pointer">Something else here</DropdownItem> */}
               </DropdownMenu>
             </Dropdown>
             {/* <NavItem>
