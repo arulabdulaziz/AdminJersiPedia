@@ -18,6 +18,7 @@
 */
 import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
+import { ListLiga, LigaAdd } from "./views";
 // import Notifications from "views/Notifications.js";
 // import Typography from "views/Typography.js";
 // import TableList from "views/Tables.js";
@@ -32,6 +33,26 @@ var routes = [
     icon: "nc-icon nc-bank",
     component: Dashboard,
     layout: "/admin",
+    title: "Dashboard",
+    sidebar: true,
+  },
+  {
+    path: "/liga",
+    name: "Liga",
+    icon: "nc-icon nc-world-2",
+    component: ListLiga,
+    layout: "/admin",
+    title: "Liga",
+    sidebar: true,
+  },
+  {
+    path: "/liga-add",
+    name: "LigaAdd",
+    icon: "nc-icon nc-world-2",
+    component: LigaAdd,
+    layout: "/admin",
+    sidebar: false,
+    title: "Tambah Liga",
   },
   {
     path: "/icons",
@@ -39,6 +60,8 @@ var routes = [
     icon: "nc-icon nc-diamond",
     component: Icons,
     layout: "/admin",
+    title: "Icons",
+    sidebar: true,
   },
   // {
   //   path: "/maps",
