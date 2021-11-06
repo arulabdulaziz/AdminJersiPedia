@@ -12,6 +12,9 @@
 # ENV config
 Add `REACT_APP_` before name the env, example `REACT_APP_API_URL` and then to get it, using syntax `proccess.env.REACT_APP_API_URL`
 
+# How To Deploy
+https://iamgique.medium.com/how-to-deploy-react-web-application-on-firebase-with-different-environments-b5dcce197635
+
 If you are a react developer or a react website owner that needs to work within a dashboard and want to have a pretty sight while doing so, Paper Dashboard React is for you. Paper Dashboard React is a Bootstrap Admin Panel which combines soft colours with beautiful typography and spacious cards and graphics. It is a powerful tool, but it is light and easy to use. It has enough features to allow you to get the job done, but it is not crowded to the point where you can't find the files for a specific plugin.
 
 We like consistency and design that blends into its purpose. Paper Dashboard React is a perfect example of our most thoughtful work. It combines over a dozen components and plugins, while looking like everything fits together. For an easy start or inspiration for you project, we have also create a set of example pages, like the user settings or usage graphics.

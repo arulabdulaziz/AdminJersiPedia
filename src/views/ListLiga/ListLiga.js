@@ -41,7 +41,7 @@ const ListLiga = (props) => {
                 <tbody>
                   {props.listLiga.length != 0 ? (
                     props.listLiga.map((liga) => (
-                      <tr>
+                      <tr key={liga.uid}>
                         <td>
                           <img
                             src={liga.image}
