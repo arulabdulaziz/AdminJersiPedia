@@ -47,7 +47,7 @@ const LigaEdit = (props) => {
         setLoadingRender(false);
         swal({
           title: "Error",
-          text: errorMessage,
+          text: JSON.stringify(errorMessage),
           icon: "error",
         });
         props.history.replace("/admin/liga");
@@ -94,7 +94,7 @@ const LigaEdit = (props) => {
             setProgress(0);
             swal({
               title: "Error",
-              text: errorMessage,
+              text: JSON.stringify(errorMessage),
               icon: "error",
             });
           },
@@ -119,7 +119,7 @@ const LigaEdit = (props) => {
                     if (error.message) errorMessage = error.message;
                     swal({
                       title: "Error",
-                      text: errorMessage,
+                      text: JSON.stringify(errorMessage),
                       icon: "error",
                     });
                   })
@@ -132,7 +132,7 @@ const LigaEdit = (props) => {
         if (error.message) errorMessage = error.message;
         swal({
           title: "Error",
-          text: errorMessage,
+          text: JSON.stringify(errorMessage),
           icon: "error",
         });
       }
@@ -149,7 +149,7 @@ const LigaEdit = (props) => {
           if (error.message) errorMessage = error.message;
           swal({
             title: "Error",
-            text: errorMessage,
+            text: JSON.stringify(errorMessage),
             icon: "error",
           });
         })

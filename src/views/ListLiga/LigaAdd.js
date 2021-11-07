@@ -56,7 +56,7 @@ const LigaAdd = (props) => {
           setProgress(0);
           swal({
             title: "Error",
-            text: errorMessage,
+            text: JSON.stringify(errorMessage),
             icon: "error",
           });
         },
@@ -79,7 +79,7 @@ const LigaAdd = (props) => {
                 if (error.message) errorMessage = error.message;
                 swal({
                   title: "Error",
-                  text: errorMessage,
+                  text: JSON.stringify(errorMessage),
                   icon: "error",
                 });
               })
