@@ -51,10 +51,13 @@ const ListLiga = (props) => {
                         </td>
                         <td>{liga.liga_name}</td>
                         <td>
-                          <Button className="mx-1 mb-1 mb-md-0" color="warning">
+                          <Link
+                            className="mx-1 mb-1 mb-md-0 btn btn-primary"
+                            to={"/admin/liga-edit/" + liga.uid}
+                          >
                             <i className="nc-icon nc-ruler-pencil mr-1"></i>
                             Edit
-                          </Button>
+                          </Link>
                           <Button className="mx-1 mb-1 mb-md-0" color="danger">
                             <i className="nc-icon nc-basket mr-1"></i>
                             Hapus

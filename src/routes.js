@@ -18,7 +18,7 @@
 */
 import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
-import { ListLiga, LigaAdd } from "./views";
+import { ListLiga, LigaAdd, LigaEdit } from "./views";
 // import Notifications from "views/Notifications.js";
 // import Typography from "views/Typography.js";
 // import TableList from "views/Tables.js";
@@ -53,6 +53,15 @@ var routes = [
     layout: "/admin",
     sidebar: false,
     title: "Tambah Liga",
+  },
+  {
+    path: "/liga-edit/:id",
+    name: "LigaEdit",
+    icon: "nc-icon nc-world-2",
+    component: LigaEdit,
+    layout: "/admin",
+    sidebar: false,
+    title: "Edit Liga",
   },
   {
     path: "/icons",
