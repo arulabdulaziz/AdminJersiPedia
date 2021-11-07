@@ -18,7 +18,14 @@
 */
 import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
-import { ListLiga, LigaAdd, LigaEdit } from "./views";
+import {
+  ListLiga,
+  LigaAdd,
+  LigaEdit,
+  JerseyAdd,
+  JerseyEdit,
+  ListJersey,
+} from "./views";
 // import Notifications from "views/Notifications.js";
 // import Typography from "views/Typography.js";
 // import TableList from "views/Tables.js";
@@ -62,6 +69,33 @@ var routes = [
     layout: "/admin",
     sidebar: false,
     title: "Edit Liga",
+  },
+  {
+    path: "/jersey",
+    name: "Jersey",
+    icon: "nc-icon nc-cart-simple",
+    component: ListJersey,
+    layout: "/admin",
+    title: "Jersey",
+    sidebar: true,
+  },
+  {
+    path: "/jersey-add",
+    name: "JerseyAdd",
+    icon: "nc-icon nc-world-2",
+    component: JerseyAdd,
+    layout: "/admin",
+    sidebar: false,
+    title: "Tambah Jersey",
+  },
+  {
+    path: "/jersey-edit/:id",
+    name: "JerseyEdit",
+    icon: "nc-icon nc-world-2",
+    component: JerseyEdit,
+    layout: "/admin",
+    sidebar: false,
+    title: "Edit Jersey",
   },
   {
     path: "/icons",
