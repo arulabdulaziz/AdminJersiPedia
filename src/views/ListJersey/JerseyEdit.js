@@ -24,6 +24,8 @@ const JerseyEdit = (props) => {
   const [club, setClub] = useState("");
   const [imageToDbUploaded, setImageToDbUploaded] = useState(null);
   const [imageToDb2Uploaded, setImageToDb2Uploaded] = useState(null);
+  const [imageToDbUploadedOld, setImageToDbUploadedOld] = useState(null);
+  const [imageToDb2UploadedOld, setImageToDb2UploadedOld] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
   const [loadingImg2, setLoadingImg2] = useState(false);
@@ -56,6 +58,8 @@ const JerseyEdit = (props) => {
           setImage2(result.image[1]);
           setImageToDbUploaded(result.image[0]);
           setImageToDb2Uploaded(result.image[1]);
+          setImageToDbUploadedOld(result.image[0]);
+          setImageToDb2UploadedOld(result.image[1]);
           setLiga(result.liga);
           setName(result.name);
           setPrice(+result.price);
@@ -136,11 +140,11 @@ const JerseyEdit = (props) => {
         if (type == 1) {
           setImage(DefaultImage);
           setLoadingImg(false);
-          setImageToDbUploaded("");
+          setImageToDbUploaded(imageToDbUploadedOld);
         } else {
           setLoadingImg2(false);
           setImage2(DefaultImage);
-          setImageToDb2Uploaded("");
+          setImageToDb2Uploaded(imageToDb2UploadedOld);
         }
         let errorMessage = error;
         if (error.message) errorMessage = error.message;
@@ -153,10 +157,14 @@ const JerseyEdit = (props) => {
       function () {
         uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
           if (type == 1) {
+            deleteImage(imageToDbUploadedOld);
             setImageToDbUploaded(downloadURL);
+            setImageToDbUploadedOld(downloadURL);
             setProgress(100);
             setLoadingImg(false);
           } else {
+            deleteImage(imageToDb2UploadedOld);
+            setImageToDb2UploadedOld(downloadURL);
             setImageToDb2Uploaded(downloadURL);
             setProgress2(100);
             setLoadingImg2(false);
@@ -164,6 +172,18 @@ const JerseyEdit = (props) => {
         });
       }
     );
+  };
+  const deleteImage = (url) => {
+    if(!url) return
+    FIREBASE.storage()
+      .refFromURL(url)
+      .delete()
+      .then((response) => {
+        console.log(response, "sukses delete image");
+      })
+      .catch((error) => {
+        console.log(error, "<<< error");
+      });
   };
   const submit = () => {
     if (!price || +price < 0) setPrice(0);
@@ -191,9 +211,11 @@ const JerseyEdit = (props) => {
       //upload ke storage firebase
       setLoading(true);
       FIREBASE.database()
-        .ref("jerseys/"+props.match.params.id)
+        .ref("jerseys/" + props.match.params.id)
         .set(payload)
         .then((response) => {
+          if (imageToDbUploaded != imageToDbUploadedOld) {
+          }
           props.history.replace("/admin/jersey");
         })
         .catch((error) => {
@@ -253,7 +275,7 @@ const JerseyEdit = (props) => {
                           <FormGroup>
                             <label>Foto Jersey (Depan)</label>
                             <Input
-                              disabled={loadingImg || loadingImg2}
+                              disabled={loadingImg || loadingImg2 || loading}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -291,7 +313,7 @@ const JerseyEdit = (props) => {
                           <FormGroup>
                             <label>Foto Jersey (Belakang)</label>
                             <Input
-                              disabled={loadingImg || loadingImg2}
+                              disabled={loadingImg || loadingImg2 || loading}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -333,6 +355,7 @@ const JerseyEdit = (props) => {
                           // placeholder="Nama Jersey"
                           type="text"
                           value={name}
+                          disabled={loading}
                           onChange={(event) => {
                             setName(event.target.value);
                           }}
@@ -347,6 +370,7 @@ const JerseyEdit = (props) => {
                               name="liga"
                               value={liga}
                               onChange={(event) => setLiga(event.target.value)}
+                              disabled={loading}
                             >
                               <option value="">--Pilih--</option>
                               {ligas.map((e) => (
@@ -362,6 +386,7 @@ const JerseyEdit = (props) => {
                             <label>Club</label>
                             <Input
                               // placeholder="Nama Jersey"
+                              disabled={loading}
                               type="text"
                               value={club}
                               onChange={(event) => {
@@ -380,6 +405,7 @@ const JerseyEdit = (props) => {
                           step="any"
                           required
                           value={price}
+                          disabled={loading}
                           onChange={(event) => {
                             setPrice(event.target.value);
                           }}
@@ -396,6 +422,7 @@ const JerseyEdit = (props) => {
                               min="0"
                               step="any"
                               required
+                              disabled={loading}
                               // placeholder="Berat"
                               onChange={(event) => {
                                 setWeight(event.target.value);
@@ -410,6 +437,7 @@ const JerseyEdit = (props) => {
                               type="text"
                               value={type}
                               name="type"
+                              disabled={loading}
                               // placeholder="Jenis"
                               onChange={(event) => setType(event.target.value)}
                             />
@@ -426,6 +454,7 @@ const JerseyEdit = (props) => {
                                 <Input
                                   type="checkbox"
                                   value={e}
+                                  disabled={loading}
                                   checked={sizeSelected.includes(e)}
                                   onChange={(event) => {
                                     const checked = event.target.checked;

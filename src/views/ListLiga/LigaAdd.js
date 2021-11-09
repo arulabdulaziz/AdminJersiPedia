@@ -164,7 +164,12 @@ const LigaAdd = (props) => {
                 </Row>
                 <Row>
                   <Col>
-                    <Button type="submit" color="primary" disabled={loading}>
+                    <Button
+                      type="submit"
+                      color="primary"
+                      disabled={loading}
+                      className="float-right"
+                    >
                       {loading && (
                         <Spinner
                           color="white"

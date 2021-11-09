@@ -24,6 +24,8 @@ const JerseyAdd = (props) => {
   const [club, setClub] = useState("");
   const [imageToDbUploaded, setImageToDbUploaded] = useState(null);
   const [imageToDb2Uploaded, setImageToDb2Uploaded] = useState(null);
+  const [imageToDbUploadedOld, setImageToDbUploadedOld] = useState(null);
+  const [imageToDb2UploadedOld, setImageToDb2UploadedOld] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
   const [loadingImg2, setLoadingImg2] = useState(false);
@@ -99,11 +101,11 @@ const JerseyAdd = (props) => {
         if (type == 1) {
           setImage(DefaultImage);
           setLoadingImg(false);
-          setImageToDbUploaded("");
+          setImageToDbUploaded(imageToDbUploadedOld);
         } else {
           setLoadingImg2(false);
           setImage2(DefaultImage);
-          setImageToDb2Uploaded("");
+          setImageToDb2Uploaded(imageToDb2UploadedOld);
         }
         let errorMessage = error;
         if (error.message) errorMessage = error.message;
@@ -115,11 +117,16 @@ const JerseyAdd = (props) => {
       },
       function () {
         uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          console.log("done")
           if (type == 1) {
+            deleteImage(imageToDbUploadedOld);
             setImageToDbUploaded(downloadURL);
+            setImageToDbUploadedOld(downloadURL);
             setProgress(100);
             setLoadingImg(false);
           } else {
+            deleteImage(imageToDb2UploadedOld);
+            setImageToDb2UploadedOld(downloadURL);
             setImageToDb2Uploaded(downloadURL);
             setProgress2(100);
             setLoadingImg2(false);
@@ -127,6 +134,18 @@ const JerseyAdd = (props) => {
         });
       }
     );
+  };
+  const deleteImage = (url) => {
+    if (!url) return;
+    FIREBASE.storage()
+      .refFromURL(url)
+      .delete()
+      .then((response) => {
+        console.log(response, "sukses delete image");
+      })
+      .catch((error) => {
+        console.log(error, "<<< error");
+      });
   };
   const submit = () => {
     if (!price || +price < 0) setPrice(0);
@@ -216,7 +235,7 @@ const JerseyAdd = (props) => {
                           <FormGroup>
                             <label>Foto Jersey (Depan)</label>
                             <Input
-                              disabled={loadingImg || loadingImg2}
+                              disabled={loadingImg || loadingImg2 || loading}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -254,7 +273,7 @@ const JerseyAdd = (props) => {
                           <FormGroup>
                             <label>Foto Jersey (Belakang)</label>
                             <Input
-                              disabled={loadingImg || loadingImg2}
+                              disabled={loadingImg || loadingImg2 || loading}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -309,6 +328,7 @@ const JerseyAdd = (props) => {
                               type="select"
                               name="liga"
                               value={liga}
+                              disabled={loading}
                               onChange={(event) => setLiga(event.target.value)}
                             >
                               <option value="">--Pilih--</option>
@@ -327,6 +347,7 @@ const JerseyAdd = (props) => {
                               // placeholder="Nama Jersey"
                               type="text"
                               value={club}
+                              disabled={loading}
                               onChange={(event) => {
                                 setClub(event.target.value);
                               }}
@@ -342,6 +363,7 @@ const JerseyAdd = (props) => {
                           min="0"
                           required
                           value={price}
+                          disabled={loading}
                           onChange={(event) => {
                             setPrice(event.target.value);
                           }}
@@ -357,6 +379,7 @@ const JerseyAdd = (props) => {
                               name="weight"
                               min="0"
                               required
+                              disabled={loading}
                               // placeholder="Berat"
                               onChange={(event) => {
                                 setWeight(event.target.value);
@@ -371,6 +394,7 @@ const JerseyAdd = (props) => {
                               type="text"
                               value={type}
                               name="type"
+                              disabled={loading}
                               // placeholder="Jenis"
                               onChange={(event) => setType(event.target.value)}
                             />
@@ -388,6 +412,7 @@ const JerseyAdd = (props) => {
                                   type="checkbox"
                                   value={e}
                                   checked={sizeSelected.includes(e)}
+                                  disabled={loading}
                                   onChange={(event) => {
                                     const checked = event.target.checked;
                                     const value = event.target.value;
@@ -419,6 +444,7 @@ const JerseyAdd = (props) => {
                               type="select"
                               name="ready"
                               value={isReady}
+                              disabled={loading}
                               onChange={(event) =>
                                 setIsReady(event.target.value)
                               }

@@ -198,6 +198,7 @@ const LigaEdit = (props) => {
                       <FormGroup>
                         <label>Logo Liga</label>
                         <Input
+                          disabled={loading}
                           type="file"
                           accept=".jpg, .png, .jpeg"
                           id="img"
@@ -227,6 +228,7 @@ const LigaEdit = (props) => {
                         <label>Nama Liga</label>
                         <Input
                           type="text"
+                          disabled={loading}
                           value={name}
                           onChange={(event) => {
                             setName(event.target.value);
@@ -235,9 +237,14 @@ const LigaEdit = (props) => {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
+                  <Row className="">
                     <Col>
-                      <Button type="submit" color="primary" disabled={loading}>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        disabled={loading}
+                        className="float-right"
+                      >
                         {loading && (
                           <Spinner
                             color="white"
