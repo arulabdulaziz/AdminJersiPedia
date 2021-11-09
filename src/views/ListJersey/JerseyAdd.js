@@ -55,14 +55,10 @@ const JerseyAdd = (props) => {
             loading: false,
           }));
         }
-        // console.log(value, "<<< value ligas");
-        // dispatchSuccess(dispatch, GET_LIST_LIGA, value);
         setLigas(value);
       })
       .catch((err) => {
         console.log("Error: ", JSON.stringify(err));
-        // // dispatchError(dispatch, GET_LIST_LIGA, JSON.stringify(err), []);
-        // setErrorLigas(JSON.stringify(err));
       })
       .finally((_) => {
         setLoadingRender(false);
@@ -376,6 +372,7 @@ const JerseyAdd = (props) => {
                                 <Input
                                   type="checkbox"
                                   value={e}
+                                  checked={sizeSelected.find(s => s == e)}
                                   onChange={(event) => {
                                     const checked = event.target.checked;
                                     const value = event.target.value;
