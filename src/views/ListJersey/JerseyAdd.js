@@ -21,11 +21,15 @@ const JerseyAdd = (props) => {
   const [image, setImage] = useState(DefaultImage);
   const [image2, setImage2] = useState(DefaultImage);
   const [name, setName] = useState("");
-  const [imageToDb, setImageToDb] = useState(null);
-  const [imageToDb2, setImageToDb2] = useState(null);
+  const [club, setClub] = useState("");
+  const [imageToDbUploaded, setImageToDbUploaded] = useState(null);
+  const [imageToDb2Uploaded, setImageToDb2Uploaded] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingImg, setLoadingImg] = useState(false);
+  const [loadingImg2, setLoadingImg2] = useState(false);
   const [loadingRender, setLoadingRender] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [progress2, setProgress2] = useState(0);
   const [sizeSelected, setSizeSelected] = useState([]);
   const [ligas, setLigas] = useState([]);
   const [liga, setLiga] = useState("");
@@ -64,78 +68,103 @@ const JerseyAdd = (props) => {
         setLoadingRender(false);
       });
   };
+  const uploadImage = (file, type = 1) => {
+    if (type == 1) setLoadingImg(true);
+    else setLoadingImg2(true);
+    var uploadTask = FIREBASE.storage()
+      .ref("jerseys")
+      .child(file.name)
+      .put(file);
+
+    uploadTask.on(
+      "state_changed",
+      function (snapshot) {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progressed =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (progressed == 100) progressed = 99;
+        console.log("Upload is " + progressed + "% done");
+        setProgress(+progressed);
+        switch (snapshot.state) {
+          case FIREBASE.storage.TaskState.PAUSED: // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case FIREBASE.storage.TaskState.RUNNING: // or 'running'
+            console.log("Upload is running");
+            break;
+        }
+      },
+      function (error) {
+        if (type == 1) {
+          setImage(DefaultImage);
+          setLoadingImg(false);
+          setImageToDbUploaded("");
+        } else {
+          setLoadingImg2(false);
+          setImage2(DefaultImage);
+          setImageToDb2Uploaded("");
+        }
+        let errorMessage = error;
+        if (error.message) errorMessage = error.message;
+        swal({
+          title: "Error",
+          text: JSON.stringify(errorMessage),
+          icon: "error",
+        });
+      },
+      function () {
+        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          if (type == 1) {
+            setImageToDbUploaded(downloadURL);
+            setProgress(100);
+            setLoadingImg(false);
+          } else {
+            setImageToDb2Uploaded(downloadURL);
+            setProgress2(100);
+            setLoadingImg2(false);
+          }
+        });
+      }
+    );
+  };
   const submit = () => {
-    if (name && imageToDb) {
+    if(!price || +price < 0) setPrice(0)
+    if (!weight || +weight < 0) setWeight(0);
+    console.log(sizeSelected);
+    return;
+    if (
+      name &&
+      club &&
+      imageToDbUploaded &&
+      imageToDb2Uploaded &&
+      sizeSelected.length != 0
+    ) {
       //upload ke storage firebase
       setLoading(true);
-      var uploadTask = FIREBASE.storage()
+      FIREBASE.database()
         .ref("ligas")
-        .child(imageToDb.name)
-        .put(imageToDb);
-
-      uploadTask.on(
-        "state_changed",
-        function (snapshot) {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          var progressed =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (progressed == 100) progressed = 99;
-          console.log("Upload is " + progressed + "% done");
-          setProgress(+progressed);
-          switch (snapshot.state) {
-            case FIREBASE.storage.TaskState.PAUSED: // or 'paused'
-              console.log("Upload is paused");
-              break;
-            case FIREBASE.storage.TaskState.RUNNING: // or 'running'
-              console.log("Upload is running");
-              break;
-          }
-        },
-        function (error) {
+        .push({})
+        .then((response) => {
+          setProgress(100);
+          props.history.replace("/admin/jersey");
+        })
+        .catch((error) => {
           let errorMessage = error;
           if (error.message) errorMessage = error.message;
-          setLoading(false);
-          setProgress(0);
           swal({
             title: "Error",
             text: JSON.stringify(errorMessage),
             icon: "error",
           });
-        },
-        function () {
-          uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-            const newData = {
-              liga_name: name,
-              image: downloadURL,
-            };
-
-            FIREBASE.database()
-              .ref("ligas")
-              .push(newData)
-              .then((response) => {
-                setProgress(100);
-                props.history.replace("/admin/jersey");
-              })
-              .catch((error) => {
-                let errorMessage = error;
-                if (error.message) errorMessage = error.message;
-                swal({
-                  title: "Error",
-                  text: JSON.stringify(errorMessage),
-                  icon: "error",
-                });
-              })
-              .finally((_) => {
-                setLoading(false);
-                setProgress(0);
-              });
-          });
-        }
-      );
+        })
+        .finally((_) => {
+          setLoading(false);
+          setProgress(0);
+        });
     } else {
       swal({
         title: "Failed",
-        text: "Nama Liga dan Logo Liga Harus Diisi!",
+        text: "Harap Isi Semua Form!",
         icon: "error",
       });
     }
@@ -176,6 +205,7 @@ const JerseyAdd = (props) => {
                           <FormGroup>
                             <label>Foto Jersey (Depan)</label>
                             <Input
+                              disabled={loadingImg || loadingImg2}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -194,20 +224,26 @@ const JerseyAdd = (props) => {
                                 ) {
                                   event.target.value = "";
                                   setImage(DefaultImage);
-                                  setImageToDb(null);
                                 } else {
                                   setImage(URL.createObjectURL(file));
-                                  setImageToDb(file);
+                                  uploadImage(file, 1);
                                 }
                               }}
                             />
                           </FormGroup>
+                          {loadingImg && (
+                            <>
+                              <Progress value={progress} />{" "}
+                              <span>{Math.floor(+progress)}%</span>
+                            </>
+                          )}
                         </Col>
                         <Col>
                           <img src={image2} width="200" />
                           <FormGroup>
                             <label>Foto Jersey (Belakang)</label>
                             <Input
+                              disabled={loadingImg || loadingImg2}
                               type="file"
                               accept=".jpg, .png, .jpeg"
                               id="img"
@@ -226,14 +262,19 @@ const JerseyAdd = (props) => {
                                 ) {
                                   event.target.value = "";
                                   setImage2(DefaultImage);
-                                  setImageToDb2(null);
                                 } else {
                                   setImage2(URL.createObjectURL(file));
-                                  setImageToDb2(file);
+                                  uploadImage(file, 2);
                                 }
                               }}
                             />
                           </FormGroup>
+                          {loadingImg2 && (
+                            <>
+                              <Progress value={progress2} />{" "}
+                              <span>{Math.floor(+progress2)}%</span>
+                            </>
+                          )}
                         </Col>
                       </Row>
                     </Col>
@@ -270,20 +311,31 @@ const JerseyAdd = (props) => {
                         </Col>
                         <Col md="6">
                           <FormGroup>
-                            <label>Harga</label>
+                            <label>Club</label>
                             <Input
-                              type="number"
-                              // placeholder="Harga"
-                              value={price}
+                              // placeholder="Nama Jersey"
+                              type="text"
+                              value={name}
                               onChange={(event) => {
-                                if (+event.target.value < 0) setPrice(0);
-                                setPrice(+event.target.value);
+                                setClub(event.target.value);
                               }}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-
+                      <FormGroup>
+                        <label>Harga</label>
+                        <Input
+                          type="number"
+                          // placeholder="Harga"
+                          min="0"
+                          required
+                          value={price}
+                          onChange={(event) => {
+                            setPrice(event.target.value);
+                          }}
+                        />
+                      </FormGroup>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
@@ -292,10 +344,11 @@ const JerseyAdd = (props) => {
                               type="number"
                               value={weight}
                               name="weight"
+                              min="0"
+                              required
                               // placeholder="Berat"
                               onChange={(event) => {
-                                if (+event.target.value < 0) setWeight(0);
-                                setWeight(+event.target.value);
+                                setWeight(event.target.value);
                               }}
                             />
                           </FormGroup>
@@ -335,7 +388,7 @@ const JerseyAdd = (props) => {
                                       const newSize = sizeSelected
                                         .filter((size) => size !== value)
                                         .map((e) => e);
-                                      setSizeSelected([newSize]);
+                                      setSizeSelected(newSize);
                                     }
                                   }}
                                 />
@@ -371,7 +424,7 @@ const JerseyAdd = (props) => {
                       <Button
                         type="submit"
                         color="primary"
-                        disabled={loading}
+                        disabled={loading || loadingImg || loadingImg2}
                         className="float-right"
                       >
                         {loading && (
@@ -386,12 +439,6 @@ const JerseyAdd = (props) => {
                     </Col>
                   </Row>
                 </form>
-                {loading && (
-                  <>
-                    <Progress value={progress} />{" "}
-                    <span>{Math.floor(+progress)}%</span>
-                  </>
-                )}
               </CardBody>
             </Card>
           </Col>
