@@ -65,8 +65,13 @@ const JerseyAdd = (props) => {
       });
   };
   const uploadImage = (file, type = 1) => {
-    if (type == 1) setLoadingImg(true);
-    else setLoadingImg2(true);
+    if (type == 1) {
+      setLoadingImg(true);
+      setProgress(0);
+    } else {
+      setLoadingImg2(true);
+      setProgress2(0);
+    }
     var uploadTask = FIREBASE.storage()
       .ref("jerseys")
       .child(file.name)
@@ -124,10 +129,8 @@ const JerseyAdd = (props) => {
     );
   };
   const submit = () => {
-    if(!price || +price < 0) setPrice(0)
+    if (!price || +price < 0) setPrice(0);
     if (!weight || +weight < 0) setWeight(0);
-    console.log(sizeSelected);
-    return;
     if (
       name &&
       club &&
@@ -135,13 +138,25 @@ const JerseyAdd = (props) => {
       imageToDb2Uploaded &&
       sizeSelected.length != 0
     ) {
+      console.log(sizeSelected);
+      const payload = {
+        club,
+        image: [imageToDbUploaded, imageToDb2Uploaded],
+        liga,
+        name,
+        price,
+        ready: isReady,
+        size: sizeSelected,
+        type,
+        weight,
+      };
+      console.log(payload, "<<< payload jersey");
       //upload ke storage firebase
       setLoading(true);
       FIREBASE.database()
-        .ref("ligas")
-        .push({})
+        .ref("jerseys")
+        .push(payload)
         .then((response) => {
-          setProgress(100);
           props.history.replace("/admin/jersey");
         })
         .catch((error) => {
@@ -311,7 +326,7 @@ const JerseyAdd = (props) => {
                             <Input
                               // placeholder="Nama Jersey"
                               type="text"
-                              value={name}
+                              value={club}
                               onChange={(event) => {
                                 setClub(event.target.value);
                               }}
@@ -372,7 +387,7 @@ const JerseyAdd = (props) => {
                                 <Input
                                   type="checkbox"
                                   value={e}
-                                  checked={sizeSelected.find(s => s == e)}
+                                  checked={sizeSelected.includes(e)}
                                   onChange={(event) => {
                                     const checked = event.target.checked;
                                     const value = event.target.value;
