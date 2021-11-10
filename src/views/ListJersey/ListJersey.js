@@ -66,7 +66,8 @@ const ListJersey = (props) => {
           return e;
         })
       );
-      await FIREBASE.storage().refFromURL(jersey.image).delete();
+      await FIREBASE.storage().refFromURL(jersey.image[0]).delete();
+      await FIREBASE.storage().refFromURL(jersey.image[1]).delete();
       await FIREBASE.database().ref("jerseys").child(jersey.uid).remove();
       setJerseys(jerseys.filter((e) => e.uid != jersey.uid));
     } catch (error) {
