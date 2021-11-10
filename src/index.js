@@ -24,16 +24,24 @@ import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.3.0";
 import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import "./styles.css"
+import "./styles.css";
 import AdminLayout from "layouts/Admin.js";
 import { Provider } from "react-redux";
-import store from "./store"
+import Login from "views/Login";
+import store from "./store";
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-        <Redirect to="/admin/dashboard" />
+        <Route
+          path="/admin"
+          render={(props) => {
+            // return <Redirect to="/login" />; // protected guard
+            return <AdminLayout {...props} />;
+          }}
+        />
+        <Route path="/login" component={Login} exact />
+        <Redirect to="/login" />
       </Switch>
     </BrowserRouter>
   </Provider>,
