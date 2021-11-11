@@ -9,17 +9,45 @@ import {
   Label,
   FormGroup,
   Button,
+  Spinner,
 } from "reactstrap";
 import { connect } from "react-redux";
 import Logo from "../assets/img/main-logo.svg";
-function Login() {
+import FIREBASE from "../config/FIREBASE";
+import swal from "sweetalert";
+const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const submit = () => {
-    console.log({
-      email,
-      password,
-    });
+  const [loading, setLoading] = useState(false);
+  const submit = async () => {
+    try {
+      setLoading(true);
+      const auth = await FIREBASE.auth().signInWithEmailAndPassword(
+        email,
+        password
+      );
+      // console.log(auth.user.Aa)
+      const admin = await FIREBASE.database()
+        .ref("admins/" + auth.user.uid)
+        .once("value");
+      if (admin.val()) {
+        localStorage.setItem("admin", JSON.stringify(admin.val()));
+        localStorage.setItem("access_token", auth.user.Aa);
+        props.history.replace("/admin/dashboard");
+      } else {
+        throw { message: "Maaf Anda Bukan Admin", code: 401 };
+      }
+    } catch (error) {
+      let errorMessage = JSON.stringify(error);
+      if (error.message) errorMessage = error.message;
+      swal({
+        text: errorMessage,
+        icon: "error",
+        title: "Error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -47,6 +75,7 @@ function Login() {
                 <FormGroup>
                   <Label>Email</Label>
                   <Input
+                    name="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -55,13 +84,22 @@ function Login() {
                 <FormGroup>
                   <Label>Password</Label>
                   <Input
+                    name="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </FormGroup>
-                <Button type="submit" color="primary" className="w-100">
-                  Login
+                <Button
+                  type="submit"
+                  color="primary"
+                  className="w-100"
+                  disabled={loading}
+                >
+                  {loading && (
+                    <Spinner color="white" className="mr-2" size="sm"></Spinner>
+                  )}
+                  <span>Login</span>
                 </Button>
               </form>
             </CardBody>
@@ -70,6 +108,6 @@ function Login() {
       </Row>
     </>
   );
-}
+};
 
 export default connect()(Login);

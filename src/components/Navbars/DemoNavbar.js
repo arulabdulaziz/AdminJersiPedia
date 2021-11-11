@@ -34,16 +34,37 @@ import {
   InputGroupText,
   InputGroupAddon,
   Input,
+  Spinner,
 } from "reactstrap";
 
 import routes from "routes.js";
-
+import FIREBASE from "../../config/FIREBASE";
+import swal from "sweetalert";
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [color, setColor] = React.useState("transparent");
+  const [loading, setLoading] = React.useState(false);
   const sidebarToggle = React.useRef();
   const location = useLocation();
+  const logout = async () => {
+    try {
+      setLoading(true);
+      const auth = await FIREBASE.auth().signOut();
+      localStorage.clear();
+      props.history.replace("/login");
+    } catch (error) {
+      let errorMessage = JSON.stringify(error);
+      if (error.message) errorMessage = error.message;
+      swal({
+        text: errorMessage,
+        icon: "error",
+        title: "Error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const toggle = () => {
     if (isOpen) {
       setColor("transparent");
@@ -158,7 +179,17 @@ function Header(props) {
                 </p>
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag="a" className="cursor-pointer">Logout</DropdownItem>
+                <DropdownItem
+                  tag="a"
+                  className="cursor-pointer"
+                  disabled={loading}
+                  onClick={() => logout()}
+                >
+                  {loading && (
+                    <Spinner color="white" className="mr-2" size="sm"></Spinner>
+                  )}
+                  <span>Logout</span>
+                </DropdownItem>
                 {/* <DropdownItem tag="a" className="cursor-pointer">Another Action</DropdownItem>
                 <DropdownItem tag="a" className="cursor-pointer">Something else here</DropdownItem> */}
               </DropdownMenu>

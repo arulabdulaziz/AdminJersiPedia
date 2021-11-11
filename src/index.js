@@ -37,10 +37,23 @@ ReactDOM.render(
           path="/admin"
           render={(props) => {
             // return <Redirect to="/login" />; // protected guard
-            return <AdminLayout {...props} />;
+            // return <AdminLayout {...props} />;
+            if (localStorage.getItem("access_token"))
+              return <AdminLayout {...props} />;
+            return <Redirect to="/login" />;
           }}
         />
-        <Route path="/login" component={Login} exact />
+        <Route
+          path="/login"
+          exact
+          render={(props) => {
+            // return <Redirect to="/login" />; // protected guard
+            // return <AdminLayout {...props} />;
+            if (localStorage.getItem("access_token"))
+              return <Redirect to="/admin/dashboard" />;
+            return <Login {...props} />;
+          }}
+        />
         <Redirect to="/login" />
       </Switch>
     </BrowserRouter>
