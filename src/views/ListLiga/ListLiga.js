@@ -29,6 +29,7 @@ const ListLiga = (props) => {
     FIREBASE.database()
       .ref("ligas")
       .once("value", (querySnapShot) => {
+                setErrorLigas("");
         let value = querySnapShot.val() ? querySnapShot.val() : null;
         if (!value) value = [];
         else {

@@ -28,6 +28,7 @@ const ListJersey = (props) => {
     FIREBASE.database()
       .ref("jerseys")
       .once("value", (querySnapShot) => {
+        setErrorJerseys("");
         let value = querySnapShot.val() ? querySnapShot.val() : null;
         if (!value) value = [];
         else {

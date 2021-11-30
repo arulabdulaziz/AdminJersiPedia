@@ -25,6 +25,7 @@ import {
   JerseyAdd,
   JerseyEdit,
   ListJersey,
+  ListOrder
 } from "./views";
 // import Notifications from "views/Notifications.js";
 // import Typography from "views/Typography.js";
@@ -96,6 +97,15 @@ var routes = [
     layout: "/admin",
     sidebar: false,
     title: "Edit Jersey",
+  },
+  {
+    path: "/order",
+    name: "Order",
+    icon: "nc-icon nc-cart-simple",
+    component: ListOrder,
+    layout: "/admin",
+    title: "Pesanan",
+    sidebar: true,
   },
   {
     path: "/icons",
