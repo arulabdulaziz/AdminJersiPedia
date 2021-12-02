@@ -28,6 +28,7 @@ import "./styles.css";
 import AdminLayout from "layouts/Admin.js";
 import { Provider } from "react-redux";
 import Login from "views/Login";
+import { Finish, Unfinish, Failed } from "views";
 import store from "./store";
 ReactDOM.render(
   <Provider store={store}>
@@ -43,6 +44,9 @@ ReactDOM.render(
             return <Redirect to="/login" />;
           }}
         />
+        <Route path="/finish" exact component={Finish} />
+        <Route path="/unfinish" exact component={Unfinish} />
+        <Route path="/failed" exact component={Failed} />
         <Route
           path="/login"
           exact
