@@ -64,7 +64,7 @@ const Finish = (props) => {
       });
   };
   const toHistory = () => {
-    window.ReactNativeWebview.postMessage("done");
+    window.ReactNativeWebView.postMessage("done");
   };
   return (
     <>
