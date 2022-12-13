@@ -22,6 +22,7 @@ const Login = (props) => {
   const submit = async () => {
     try {
       setLoading(true);
+      console.log(FIREBASE.auth(), "<< firebase auth");
       const auth = await FIREBASE.auth().signInWithEmailAndPassword(
         email,
         password
@@ -67,7 +68,9 @@ const Login = (props) => {
             </CardHeader>
             <CardBody>
               <form
+                data-testid="login-form"
                 onSubmit={(e) => {
+                  console.log(e, "e");
                   e.preventDefault();
                   submit();
                 }}
@@ -75,6 +78,7 @@ const Login = (props) => {
                 <FormGroup>
                   <Label>Email</Label>
                   <Input
+                    data-testid="email"
                     name="email"
                     type="email"
                     value={email}
@@ -84,6 +88,7 @@ const Login = (props) => {
                 <FormGroup>
                   <Label>Password</Label>
                   <Input
+                    data-testid="password"
                     name="password"
                     type="password"
                     value={password}
@@ -94,7 +99,7 @@ const Login = (props) => {
                   type="submit"
                   color="primary"
                   className="w-100"
-                  disabled={loading}
+                  // disabled={loading}
                 >
                   {loading && (
                     <Spinner color="white" className="mr-2" size="sm"></Spinner>
@@ -110,4 +115,4 @@ const Login = (props) => {
   );
 };
 
-export default connect()(Login);
+export default Login;
