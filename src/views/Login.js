@@ -22,12 +22,10 @@ const Login = (props) => {
   const submit = async () => {
     try {
       setLoading(true);
-      console.log(FIREBASE.auth(), "<< firebase auth");
       const auth = await FIREBASE.auth().signInWithEmailAndPassword(
         email,
         password
       );
-      // console.log(auth.user.Aa)
       const admin = await FIREBASE.database()
         .ref("admins/" + auth.user.uid)
         .once("value");
@@ -39,6 +37,7 @@ const Login = (props) => {
         throw { message: "Maaf Anda Bukan Admin", code: 401 };
       }
     } catch (error) {
+      console.log(error, "error");
       let errorMessage = JSON.stringify(error);
       if (error.message) errorMessage = error.message;
       swal({
@@ -54,8 +53,7 @@ const Login = (props) => {
     <>
       <Row
         className="justify-content-center align-items-center m-0 p-0"
-        style={{ height: "100vh", overflow: "hidden" }}
-      >
+        style={{ height: "100vh", overflow: "hidden" }}>
         <Col md="4">
           <Card>
             <img
@@ -70,11 +68,9 @@ const Login = (props) => {
               <form
                 data-testid="login-form"
                 onSubmit={(e) => {
-                  console.log(e, "e");
                   e.preventDefault();
                   submit();
-                }}
-              >
+                }}>
                 <FormGroup>
                   <Label>Email</Label>
                   <Input

@@ -43,28 +43,27 @@ const JerseyAdd = (props) => {
   useEffect(() => {
     getAllLiga();
   }, []);
-  const getAllLiga = () => {
-    setLoadingRender(true);
-    FIREBASE.database()
-      .ref("ligas")
-      .once("value", (querySnapShot) => {
-        let value = querySnapShot.val() ? querySnapShot.val() : null;
-        if (!value) value = [];
-        else {
-          value = Object.keys(value).map((e) => ({
-            ...value[e],
-            uid: e,
-            loading: false,
-          }));
-        }
-        setLigas(value);
-      })
-      .catch((err) => {
-        console.log("Error: ", JSON.stringify(err));
-      })
-      .finally((_) => {
-        setLoadingRender(false);
-      });
+  const getAllLiga = async () => {
+    try {
+      setLoadingRender(true);
+      const querySnapShot = await FIREBASE.database()
+        .ref("ligas")
+        .once("value");
+      let value = querySnapShot.val() ? querySnapShot.val() : null;
+      if (!value) value = [];
+      else {
+        value = Object.keys(value).map((e) => ({
+          ...value[e],
+          uid: e,
+          loading: false,
+        }));
+      }
+      setLigas(value);
+    } catch (error) {
+      console.log("Error: ", JSON.stringify(error));
+    } finally {
+      setLoadingRender(false);
+    }
   };
   const uploadImage = (file, type = 1) => {
     if (type == 1) {
@@ -117,7 +116,7 @@ const JerseyAdd = (props) => {
       },
       function () {
         uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-          console.log("done")
+          console.log("done");
           if (type == 1) {
             deleteImage(imageToDbUploadedOld);
             setImageToDbUploaded(downloadURL);
@@ -225,8 +224,7 @@ const JerseyAdd = (props) => {
                   onSubmit={(e) => {
                     e.preventDefault();
                     submit();
-                  }}
-                >
+                  }}>
                   <Row className="">
                     <Col md={6}>
                       <Row>
@@ -325,15 +323,18 @@ const JerseyAdd = (props) => {
                           <FormGroup>
                             <label>Liga</label>
                             <Input
+                              data-testid="select-liga"
                               type="select"
                               name="liga"
                               value={liga}
                               disabled={loading}
-                              onChange={(event) => setLiga(event.target.value)}
-                            >
+                              onChange={(event) => setLiga(event.target.value)}>
                               <option value="">--Pilih--</option>
-                              {ligas.map((e) => (
-                                <option value={e.uid} key={e.uid}>
+                              {ligas.map((e, i) => (
+                                <option
+                                  value={e.uid}
+                                  key={e.uid}
+                                  data-testid={`select-liga-option-${i}`}>
                                   {e.liga_name}
                                 </option>
                               ))}
@@ -447,8 +448,7 @@ const JerseyAdd = (props) => {
                               disabled={loading}
                               onChange={(event) =>
                                 setIsReady(event.target.value)
-                              }
-                            >
+                              }>
                               <option value={true}>Ada</option>
                               <option value={false}>Kosong</option>
                             </Input>
@@ -463,14 +463,12 @@ const JerseyAdd = (props) => {
                         type="submit"
                         color="primary"
                         disabled={loading || loadingImg || loadingImg2}
-                        className="float-right"
-                      >
+                        className="float-right">
                         {loading && (
                           <Spinner
                             color="white"
                             size="sm"
-                            className="mr-2"
-                          ></Spinner>
+                            className="mr-2"></Spinner>
                         )}
                         <span>Submit</span>
                       </Button>
@@ -486,6 +484,4 @@ const JerseyAdd = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
-const mapStateToDispatch = (dispatch) => ({});
-export default connect(mapStateToProps, mapStateToDispatch)(JerseyAdd);
+export default JerseyAdd;
