@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FixedPlugin Using react-test-renderer using props 1 1`] = `
+<div
+  className="fixed-plugin"
+>
+  <div
+    className="dropdown show"
+  >
+    <div
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-cog fa-2x"
+      />
+    </div>
+    <ul
+      className="dropdown-menu show"
+    >
+      <li
+        className="header-title"
+      >
+        SIDEBAR BACKGROUND
+      </li>
+      <li
+        className="adjustments-line"
+      >
+        <div
+          className="badge-colors text-center"
+        >
+          <span
+            className="badge filter badge-dark"
+            data-color="black"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-light active"
+            data-color="white"
+            onClick={[Function]}
+          />
+        </div>
+      </li>
+      <li
+        className="header-title"
+      >
+        SIDEBAR ACTIVE COLOR
+      </li>
+      <li
+        className="adjustments-line"
+      >
+        <div
+          className="badge-colors text-center"
+        >
+          <span
+            className="badge filter badge-primary active"
+            data-color="primary"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-info"
+            data-color="info"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-success"
+            data-color="success"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-warning"
+            data-color="warning"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-danger"
+            data-color="danger"
+            onClick={[Function]}
+          />
+        </div>
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-primary btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-react?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+        >
+          Download now
+        </a>
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-outline-default btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-react/#/documentation/tutorial?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+        >
+          <i
+            className="nc-icon nc-paper"
+          />
+           Documentation
+        </a>
+      </li>
+      <li
+        className="header-title"
+      >
+        Want more components?
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-danger btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-pro-react?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+          target="_blank"
+        >
+          Get pro version
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`FixedPlugin Using react-test-renderer using props 2 1`] = `
+<div
+  className="fixed-plugin"
+>
+  <div
+    className="dropdown show"
+  >
+    <div
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-cog fa-2x"
+      />
+    </div>
+    <ul
+      className="dropdown-menu show"
+    >
+      <li
+        className="header-title"
+      >
+        SIDEBAR BACKGROUND
+      </li>
+      <li
+        className="adjustments-line"
+      >
+        <div
+          className="badge-colors text-center"
+        >
+          <span
+            className="badge filter badge-dark active"
+            data-color="black"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-light"
+            data-color="white"
+            onClick={[Function]}
+          />
+        </div>
+      </li>
+      <li
+        className="header-title"
+      >
+        SIDEBAR ACTIVE COLOR
+      </li>
+      <li
+        className="adjustments-line"
+      >
+        <div
+          className="badge-colors text-center"
+        >
+          <span
+            className="badge filter badge-primary"
+            data-color="primary"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-info"
+            data-color="info"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-success"
+            data-color="success"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-warning"
+            data-color="warning"
+            onClick={[Function]}
+          />
+          <span
+            className="badge filter badge-danger"
+            data-color="danger"
+            onClick={[Function]}
+          />
+        </div>
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-primary btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-react?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+        >
+          Download now
+        </a>
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-outline-default btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-react/#/documentation/tutorial?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+        >
+          <i
+            className="nc-icon nc-paper"
+          />
+           Documentation
+        </a>
+      </li>
+      <li
+        className="header-title"
+      >
+        Want more components?
+      </li>
+      <li
+        className="button-container"
+      >
+        <a
+          aria-label={null}
+          className="btn-round btn btn-danger btn-block"
+          href="https://www.creative-tim.com/product/paper-dashboard-pro-react?ref=pdr-fixed-plugin"
+          onClick={[Function]}
+          target="_blank"
+        >
+          Get pro version
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
